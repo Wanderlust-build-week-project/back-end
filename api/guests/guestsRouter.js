@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Guests = require("./guestsHelper.js");
+const { validateGuestId } = require("../middleware");
 
 router.get("/", (req, res) => {
   Guests.getGuests()
@@ -8,7 +9,7 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateGuestId, (req, res) => {
   const { id } = req.params;
 
   Guests.getGuestById(id)
