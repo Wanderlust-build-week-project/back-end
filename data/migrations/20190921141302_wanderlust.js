@@ -19,7 +19,7 @@ exports.up = function (knex) {
         })
         .createTable('types', tbl => {
             tbl.increments();
-            tbl.string('type', 128).notNullable();
+            tbl.string('type', 128).notNullable().unique();
         })
         .createTable('experiences', tbl => {
             tbl.increments();

@@ -24,13 +24,13 @@ function getTypeByType(type) {
 
 function addType(type){
     return db('types').insert(type).then(result => {
-        return getTypeByType(type)
+        return getTypeByType(type.type).then(newType => newType)
     })
 }
 
 function updateType(id, type){
     return db('types').where({id}).update(type).then(result => {
-        return getTypeByType(type)
+        return getTypeByType(type.type).then(updatedType => updatedType)
     })
 }
 
