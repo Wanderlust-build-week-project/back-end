@@ -34,6 +34,17 @@ router.get('/:id', (req, res) => {
     })
 })
 
+router.get('/username/:username', (req, res) => {
+    const username = req.params.username;
+    Organizers.getOrganizerByUsername(username)
+    .then(organizer => {
+        res.status(200).json(organizer)
+    })
+    .catch(err => {
+        res.status(500).json({error: err})
+    })
+})
+
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
     Organizers.deleteOrganizer(id)
