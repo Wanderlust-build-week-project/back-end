@@ -3,8 +3,8 @@ const db = require("../../data/dbConfig.js");
 module.exports = {
   getGuests,
   getGuestById,
-  getGuestByUsername,
   addGuest,
+  getGuestByUsername,
   deleteGuest,
   updateGuest
 };
@@ -19,15 +19,15 @@ function getGuestById(id) {
     .first();
 }
 
+async function addGuest(guest) {
+  const [id] = await db("guests").insert(guest);
+  return getGuestById(id);
+}
+
 function getGuestByUsername(username) {
   return db("guests")
     .where({ username })
     .first();
-}
-
-async function addGuest(guest) {
-  const [id] = await db("guests").insert(guest);
-  return getGuestById(id);
 }
 
 function deleteGuest(id) {
