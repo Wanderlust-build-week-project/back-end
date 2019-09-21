@@ -8,6 +8,22 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+
+  Guests.getGuestById(id)
+    .then(guest => res.status(200).json(guest))
+    .catch(err => res.status(500).json({ error: err }));
+});
+
+router.get("/username/:username", (req, res) => {
+  const { username } = req.params;
+  console.log(username);
+  Guests.getGuestByUsername(username)
+    .then(guest => res.status(200).json(guest))
+    .catch(err => res.status(500).json({ error: err }));
+});
+
 router.post("/", (req, res) => {
   const guest = req.body;
 
