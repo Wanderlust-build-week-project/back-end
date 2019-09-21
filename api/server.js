@@ -1,10 +1,16 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
 const server = express();
-const OrganizerRoute = require('./organizers/organizersRouter')
+
+const GuestsRoute = require("./guests/guestsRouter.js");
+const OrganizerRoute = require("./organizers/organizersRouter");
+
 server.use(cors());
 server.use(helmet());
 server.use(express.json());
-server.use('/organizers', OrganizerRoute);
+
+server.use("/guests", GuestsRoute);
+server.use("/organizers", OrganizerRoute);
+
 module.exports = server;
