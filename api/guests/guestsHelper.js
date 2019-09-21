@@ -27,7 +27,7 @@ function getGuestByUsername(username) {
 
 async function addGuest(guest) {
   const [id] = await db("guests").insert(guest);
-  return findByGuestId(id);
+  return getGuestById(id);
 }
 
 function deleteGuest(id) {
@@ -36,8 +36,9 @@ function deleteGuest(id) {
     .del();
 }
 
-function updateGuest(id, changes) {
-  return db("guests")
-    .where({ id: id })
-    .update({ changes });
+async function updateGuest(id, changes) {
+  await db("guests")
+    .where({ id })
+    .update(changes);
+  return getGuestById(id);
 }
