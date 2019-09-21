@@ -1,25 +1,25 @@
 const db = require("../../data/dbConfig.js");
 
 module.exports = {
-  getAllGuests,
-  findByGuestId,
-  findByGuestUsername,
+  getGuests,
+  getGuestById,
+  getGuestByUsername,
   addGuest,
-  removeGuestById,
+  deleteGuest,
   updateGuest
 };
 
-function getAllGuests() {
+function getGuests() {
   return db("guests");
 }
 
-function findByGuestId(id) {
+function getGuestById(id) {
   return db("guests")
     .where({ id })
     .first();
 }
 
-function findByGuestUsername(username) {
+function getGuestByUsername(username) {
   return db("guests")
     .where({ username })
     .first();
@@ -30,7 +30,7 @@ async function addGuest(guest) {
   return findByGuestId(id);
 }
 
-function removeGuestById(id) {
+function deleteGuest(id) {
   return db("guests")
     .where({ id: id })
     .del();
