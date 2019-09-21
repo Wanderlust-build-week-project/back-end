@@ -24,14 +24,6 @@ router.get("/username/:username", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.post("/", (req, res) => {
-  const guest = req.body;
-
-  Guests.addGuest(guest)
-    .then(guest => res.status(201).json(guest))
-    .catch(err => res.status(500).json({ error: err }));
-});
-
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
 
