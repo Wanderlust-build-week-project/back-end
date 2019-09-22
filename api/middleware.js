@@ -72,7 +72,6 @@ function validateOrganizerUsername(req, res, next) {
 
 function validateLocation(req, res, next) {
   let { location } = req.body;
-  console.log(location);
   if (location) {
     next();
   } else {
@@ -84,7 +83,6 @@ function validateLocation(req, res, next) {
 
 function validateType(req, res, next) {
   let { type } = req.body;
-  console.log(type);
   if (type) {
     next();
   } else {
