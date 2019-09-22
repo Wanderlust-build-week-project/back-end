@@ -10,7 +10,15 @@ module.exports = {
   validateOrganizerId,
   validateOrganizerUsername,
   validateLocation,
-  validateType
+  validateType,
+  validateNewExperience,
+  validateExperienceId,
+  validateLocationId,
+  validateLocationName,
+  validateTypeId,
+  validateTypeName,
+  validateGuestExperience,
+  validateExperienceType
 };
 
 function validateGuestId(req, res, next) {
@@ -81,6 +89,30 @@ function validateLocation(req, res, next) {
   }
 }
 
+function validateLocationId(req, res, next) {
+  const id = req.params.id;
+  Locations.getLocationById(id)
+  .then(location => {
+    if(location) {
+      next()
+    } else {
+      res.status(400).json({message: 'Please provide a valid location id'})
+    }
+  })
+}
+
+function validateLocationName(req, res, next) {
+  const location = req.params.location;
+  Locations.getLocationByName(location)
+  .then(result => {
+    if(result) {
+      next()
+    } else {
+      res.status(400).json({message: 'Please provide a valid location name'})
+    }
+  })
+}
+
 function validateType(req, res, next) {
   let { type } = req.body;
   if (type) {
@@ -90,4 +122,102 @@ function validateType(req, res, next) {
       message: "Types require a valid string for the type property."
     });
   }
+}
+
+function validateTypeId(req, res, next) {
+  const id = req.params.id;
+  Types.getTypeById(id)
+  .then(type => {
+    if(type) {
+      next()
+    } else{
+      res.status(400).json({message: 'Please provide a valid type id'})
+    }
+  })
+}
+
+function validateTypeName(req, res, next) {
+  const type = req.params.type;
+  Types.getTypeByType(type).then(returnedType => {
+    if(returnedType) {
+      next()
+    } else{
+      res.status(400).json({message: 'Please provide a valid type'})
+    }
+  })
+}
+
+function validateNewExperience(req, res, next) {
+  let experience = req.body;
+  Organizers.getOrganizerById(experience.organizer_id)
+    .then(organizer => {
+      if (organizer) {
+        Locations.getLocationById(experience.location_id).then(location => {
+          if (location) {
+            if (experience.name) {
+              if (experience.duration) {
+                next()
+              } else {
+                res.status(400).json({ message: 'Please provide a duration in hours' })
+              }
+            } else {
+              res.status(400).json({ message: 'Please provide an experience name' })
+            }
+          } else {
+            res.status(400).json({ message: 'Please provide a valid location_id' })
+          }
+        })
+      } else {
+        res.status(400).json({ message: 'Please provide a valid organizer_id' })
+      }
+    })
+}
+
+function validateExperienceId(req, res, next) {
+  const id = req.params.id;
+  Experiences.getExperienceById(id)
+  .then(experience => {
+    if(experience) {
+      next()
+    }else {
+      res.status(400).json({message: 'Please provide a valid experience id'})
+    }
+  })
+}
+
+function validateGuestExperience(req, res, next) {
+  guest_experience = req.body;
+  Experiences.getExperienceById(guest_experience.experience_id)
+  .then(experience => {
+    if(experience) {
+      Guests.getGuestById(guest_experience.guest_id).then(guest => {
+        if(guest) {
+          next()
+        } else {
+          res.status(400).json({message: 'Please provide a valid guest_id'})
+        }
+      })
+    } else {
+      res.status(400).json({message: 'Please provide a valide experience_id'})
+    }
+  })
+}
+
+function validateExperienceType(req, res, next) {
+  const experience_type = req.body;
+  Types.getTypeById(experience_type.type_id)
+  .then(type =>{
+    if(type) {
+      Experiences.getExperienceById(experience_type.experience_id)
+      .then(experience => {
+        if(experience) {
+          next()
+        } else {
+          res.status(400).json({message: 'Please provide a valid experience_id'})
+        }
+      })
+    } else {
+      res.status(400).json({message: 'Please provide a valid type_id'})
+    }
+  })
 }
