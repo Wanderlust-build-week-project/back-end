@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Organizers = require("./organizersHelper");
+const {
+  validateOrganizerId,
+  validateOrganizerUsername
+} = require("../middleware");
 
 router.get("/", (req, res) => {
   Organizers.getOrganizers()
@@ -12,7 +16,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateOrganizerId, (req, res) => {
   const id = req.params.id;
   Organizers.getOrganizerById(id)
     .then(organizer => {
@@ -23,7 +27,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/username/:username", (req, res) => {
+router.get("/username/:username", validateOrganizerUsername, (req, res) => {
   const username = req.params.username;
   Organizers.getOrganizerByUsername(username)
     .then(organizer => {
@@ -34,7 +38,7 @@ router.get("/username/:username", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateOrganizerId, (req, res) => {
   const id = req.params.id;
   Organizers.deleteOrganizer(id)
     .then(result => {
@@ -47,7 +51,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validateOrganizerId, (req, res) => {
   const id = req.params.id;
   const organizer = req.body;
   Organizers.updateOrganizer(id, organizer)

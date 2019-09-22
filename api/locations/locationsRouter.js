@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Locations = require("./locationsHelper.js");
+const { validateLocation } = require("../middleware");
 
 router.get("/", (req, res) => {
   Locations.getLocations()
@@ -24,7 +25,7 @@ router.get("/location/:location", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.post("/", (req, res) => {
+router.post("/", validateLocation, (req, res) => {
   const location = req.body;
 
   Locations.addLocation(location)
