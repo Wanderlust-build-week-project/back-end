@@ -211,7 +211,7 @@ function validateExperienceType(req, res, next) {
       Experiences.getExperienceById(experience_type.experience_id)
       .then(experience => {
         if(experience) {
-          next()
+          next();
         } else {
           res.status(400).json({message: 'Please provide a valid experience_id'})
         }
