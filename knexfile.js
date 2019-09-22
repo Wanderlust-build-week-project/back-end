@@ -21,10 +21,10 @@ module.exports = {
   },
 
   production: {
-    client: "sqlite3",
+    client: "pg",
     useNullAsDefault: true,
     connection: {
-      filename: "./data/wanderlust.db3"
+      filename: "process.env.DATABASE_URL"
     },
     migrations: {
       directory: "./data/migrations"
