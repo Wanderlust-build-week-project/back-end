@@ -19,5 +19,5 @@ server.use("/organizers", authenticate, OrganizerRoute);
 server.use("/locations", authenticate, LocationsRoute);
 server.use("/types", authenticate, TypesRoute);
 server.use("/auth", AuthRoute);
-server.use("/experiences", ExperiencesRoute);
+server.use("/experiences",authenticate, ExperiencesRoute);
 module.exports = server;
