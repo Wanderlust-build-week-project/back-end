@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Guests = require("./guestsHelper.js");
+const { validateGuestId, validateGuestUsername } = require("../middleware");
 
 router.get("/", (req, res) => {
   Guests.getGuests()
@@ -8,7 +9,7 @@ router.get("/", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateGuestId, (req, res) => {
   const { id } = req.params;
 
   Guests.getGuestById(id)
@@ -16,7 +17,7 @@ router.get("/:id", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.get("/username/:username", (req, res) => {
+router.get("/username/:username", validateGuestUsername, (req, res) => {
   const { username } = req.params;
   console.log(username);
   Guests.getGuestByUsername(username)
@@ -24,7 +25,7 @@ router.get("/username/:username", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateGuestId, (req, res) => {
   const { id } = req.params;
 
   Guests.deleteGuest(id)
@@ -36,7 +37,7 @@ router.delete("/:id", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validateGuestId, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
