@@ -22,39 +22,115 @@ module.exports = {
 }
 
 function getExperiences() {
-    return db('experiences').then(experiences => experiences)
+    return db('experiences').then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true;
+            } else {
+                experience.completed = false;
+            }
+            return experience;
+        })})
 }
 
+function getExperienceById(id) {
+    return db('experiences').where({id}).first().then(experience => {
+        if(experience.completed === 1) {
+            experience.completed = true;
+        } else {
+            experience.completed = false;
+        }
+        return experience;
+    })
+}
 
 function getExperiencesByOrganizer(username) {
-    return db('experiences as e').join('organizers as o', 'e.organizer_id', 'o.id').where({username}).then(experiences => experiences)
+    return db('experiences as e').join('organizers as o', 'e.organizer_id', 'o.id').where({username}).select('e.*','o.username').then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
 function getExperiencesByOrganizerId(organizer_id) {
-    return db('experiences').where({organizer_id}).then(experiences => experiences)
+    return db('experiences as e').join('organizers as o', 'e.organizer_id', 'o.id').select('e.*', 'o.username').where({organizer_id}).then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
 
 
 function getExperiencesByLocationId(location_id) {
-    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location_id}).then(experience => experience)
+    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location_id}).then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
 function getExperiencesByLocation(location) {
-    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location}).then(experience => experience)
+    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location}).then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
 function getExperiencesByType(type) {
-    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type}).then(experiences => experiences)
+    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type}).then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
 function getExperiencesByTypeId(id) {
-    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type_id: id}).then(experiences => experiences)
+    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type_id: id}).then(experiences => {
+        return experiences.map(experience => {
+            if(experience.completed === 1) {
+                experience.completed = true
+            } else {
+                experience.completed = false;
+            }
+
+            return experience;
+        })
+    })
 }
 
-function getExperienceById(id) {
-    return db('experiences').where({id}).first().then(experience => experience)
-}
+
 
 function addExperience(experience) {
     return db('experiences').insert(experience).then(res => {
@@ -81,7 +157,7 @@ function getExperienceTypes() {
 }
 
 function addGuestExperience(guestExperience) {
-    return db('guest_experiences').insert(guestExperience)
+    return db('guest_experiences').insert(guestExperience).then(result => result)
 }
 function updateGuestExperience(guest_id, experience_id, updated_experience){
     return db('guest_experiences').update(updated_experience).where({guest_id: guest_id, experience_id: experience_id})
