@@ -4,11 +4,17 @@ module.exports = {
     getExperiences,
     getExperiencesByOrganizer,
     addExperience,
-    getExperinceById,
-    getExperiencesByLocation,
+    getExperienceById,
+    getExperiencesByLocationId,
     getExperiencesByGuest,
     getExperiencesByType,
-    addExperienceType
+    addExperienceType,
+    getExperienceTypes,
+    getExperiencesByLocation,
+    getExperiencesByTypeId,
+    getExperiencesByOrganizerId,
+    updateExperience,
+    deleteExperience
 }
 
 function getExperiences() {
@@ -16,7 +22,11 @@ function getExperiences() {
 }
 
 
-function getExperiencesByOrganizer(organizer_id) {
+function getExperiencesByOrganizer(username) {
+    return db('experiences as e').join('organizers as o', 'e.organizer_id', 'o.id').where({username}).then(experiences => experiences)
+}
+
+function getExperiencesByOrganizerId(organizer_id) {
     return db('experiences').where({organizer_id}).then(experiences => experiences)
 }
 
@@ -24,21 +34,47 @@ function getExperiencesByGuest(guest_id) {
     return db('guest_experiences as ge').join('experiences as e', 'g.experience_id', 'e.id').where({guest_id}).then(experiences => experiences)
 }
 
-function getExperiencesByLocation(location_id) {
+function getExperiencesByLocationId(location_id) {
     return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location_id}).then(experience => experience)
 }
-function getExperiencesByType(type) {
-    return db('types as t').join('experiences as e', 't.experience_id', 'e.id').where({type}).then(experiences => experiences)
+
+function getExperiencesByLocation(location) {
+    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location}).then(experience => experience)
 }
-function getExperinceById(id) {
+
+function getExperiencesByType(type) {
+    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type}).then(experiences => experiences)
+}
+
+function getExperiencesByTypeId(id) {
+    return db('types as t').join('experience_types as et', 't.id', 'et.type_id').join('experiences as e','et.experience_id', 'e.id').where({type_id: id}).then(experiences => experiences)
+}
+
+function getExperienceById(id) {
     return db('experiences').where({id}).first().then(experience => experience)
 }
+
 function addExperience(experience) {
     return db('experiences').insert(experience).then(res => {
         return getExperinceById(res[0])
     })
 }
 
+function updateExperience(id, experience){
+    return db('experiences').update(experience).where({id}).then(updatedExperience => {
+        return getExperienceById(id)
+    })
+}
+
+function deleteExperience(id) {
+    return db('experiences').where({id}).del().then(result => result)
+}
+
 function addExperienceType(experienceType){
     return db('experience_types').insert(experienceType).then(result => result)
 }
+
+function getExperienceTypes() {
+    return db('experience_types').then(et => et)
+}
+
