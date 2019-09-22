@@ -7,6 +7,7 @@ module.exports = {
     getExperienceById,
     getExperiencesByLocationId,
     getExperiencesByGuest,
+    getExperiencesByGuestId,
     getExperiencesByType,
     addExperienceType,
     getExperienceTypes,
@@ -14,7 +15,10 @@ module.exports = {
     getExperiencesByTypeId,
     getExperiencesByOrganizerId,
     updateExperience,
-    deleteExperience
+    deleteExperience,
+    addGuestExperience,
+    getGuestExperiences,
+    updateGuestExperience
 }
 
 function getExperiences() {
@@ -30,9 +34,7 @@ function getExperiencesByOrganizerId(organizer_id) {
     return db('experiences').where({organizer_id}).then(experiences => experiences)
 }
 
-function getExperiencesByGuest(guest_id) {
-    return db('guest_experiences as ge').join('experiences as e', 'g.experience_id', 'e.id').where({guest_id}).then(experiences => experiences)
-}
+
 
 function getExperiencesByLocationId(location_id) {
     return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').where({location_id}).then(experience => experience)
@@ -56,7 +58,7 @@ function getExperienceById(id) {
 
 function addExperience(experience) {
     return db('experiences').insert(experience).then(res => {
-        return getExperinceById(res[0])
+        return getExperienceById(res[0])
     })
 }
 
@@ -78,3 +80,20 @@ function getExperienceTypes() {
     return db('experience_types').then(et => et)
 }
 
+function addGuestExperience(guestExperience) {
+    return db('guest_experiences').insert(guestExperience)
+}
+function updateGuestExperience(guest_id, experience_id, updated_experience){
+    return db('guest_experiences').update(updated_experience).where({guest_id: guest_id, experience_id: experience_id})
+}
+function getGuestExperiences() {
+    return db('guest_experiences').then(guest_experiences => guest_experiences);
+}
+
+function getExperiencesByGuestId(guest_id) {
+    return db('guest_experiences as ge').join('experiences as e', 'ge.experience_id', 'e.id').where({guest_id}).then(experiences => experiences)
+}
+
+function getExperiencesByGuest(username) {
+    return db('guests as g').join('guest_experiences as ge', 'g.id', 'ge.guest_id').join('experiences as e', 'ge.experience_id', 'e.id').where({username}).then(experiences => experiences)
+}
