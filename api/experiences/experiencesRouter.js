@@ -13,7 +13,8 @@ const {
     validateOrganizerUsername, 
     validateTypeId, 
     validateTypeName, 
-    validateNewExperience
+    validateNewExperience,
+    validateGuestExperienceForDelete
 } = require('../middleware');
 
 router.get('/', (req, res) => {
@@ -160,7 +161,7 @@ router.post('/experienceType', validateExperienceType, (req, res) => {
 
 
 //guest experiences
-router.get('/guestExperiences', (req, res) => {
+router.get('/guestexperiences', (req, res) => {
     Experiences.getGuestExperiences()
         .then(experiences => {
             res.status(200).json(experiences)
@@ -170,7 +171,7 @@ router.get('/guestExperiences', (req, res) => {
         })
 })
 
-router.get('/guestExperiences/:id', validateGuestId, (req, res) => {
+router.get('/guestexperiences/:id', validateGuestId, (req, res) => {
     const guest_id = req.params.id;
     Experiences.getExperiencesByGuestId(guest_id)
         .then(experiences => {
@@ -181,7 +182,7 @@ router.get('/guestExperiences/:id', validateGuestId, (req, res) => {
         })
 })
 
-router.get('/guestExperiences/name/:username', validateGuestUsername, (req, res) => {
+router.get('/guestexperiences/name/:username', validateGuestUsername, (req, res) => {
     const username = req.params.username;
     Experiences.getExperiencesByGuest(username)
         .then(experiences => {
@@ -192,7 +193,7 @@ router.get('/guestExperiences/name/:username', validateGuestUsername, (req, res)
         })
 })
 
-router.post('/guestExperiences', validateGuestExperience, (req, res) => {
+router.post('/guestexperiences', validateGuestExperience, (req, res) => {
     const guest_experience = req.body;
     console.log(req.body)
     Experiences.addGuestExperience(guest_experience)
@@ -204,7 +205,7 @@ router.post('/guestExperiences', validateGuestExperience, (req, res) => {
         })
 })
 
-router.put('/guestExperiences/:guest_id/:experience_id', validateGuestExperience, (req, res) => {
+router.put('/guestexperiences/:guest_id/:experience_id', validateGuestExperience, (req, res) => {
     console.log(req.body)
     const updated_experience = req.body;
     const guest_id = req.params.guest_id;
@@ -218,5 +219,17 @@ router.put('/guestExperiences/:guest_id/:experience_id', validateGuestExperience
             console.log(err)
             res.status(500).json({ error: err })
         })
+})
+
+router.delete('/guestexperiences/:guest_id/:experience_id', validateGuestExperienceForDelete, (req, res) => {
+    const guest_id = req.params.guest_id;
+    const experience_id = req.params.experience_id;
+    Experiences.deleteGuestExperience(guest_id, experience_id)
+    .then(result => {
+        res.status(200).json({message: `Successfully deleted guest experience at guest_id ${guest_id}, and experience_id ${experience_id}`})
+    })
+    .catch(err => {
+        res.status(500).json({error: err})
+    })
 })
 module.exports = router;

@@ -18,7 +18,8 @@ module.exports = {
   validateTypeId,
   validateTypeName,
   validateGuestExperience,
-  validateExperienceType
+  validateExperienceType,
+  validateGuestExperienceForDelete
 };
 
 function validateGuestId(req, res, next) {
@@ -199,6 +200,19 @@ function validateGuestExperience(req, res, next) {
       })
     } else {
       res.status(400).json({message: 'Please provide a valide experience_id'})
+    }
+  })
+}
+
+function validateGuestExperienceForDelete(req, res, next) {
+  const guest_id = req.params.guest_id;
+  const experience_id = req.params.experience_id;
+  Experiences.getGuestExperienceByIds(guest_id, experience_id)
+  .then(guestExperience => {
+    if(guestExperience) {
+      next()
+    } else{
+      res.status(400).json({message: 'Please provide a valid guest_id and experience_id'})
     }
   })
 }
