@@ -11,6 +11,8 @@ const {
     validateTypeId, 
     validateTypeName, 
     validateNewExperience,
+    validateGuestId,
+    validateGuestUsername
     
 } = require('../middleware');
 
@@ -135,9 +137,20 @@ router.delete('/experience/:id', validateExperienceId, (req, res) => {
         })
 })
 
+router.get('/guest/:id', validateGuestId, (req, res) => {
+    const guest_id = req.params.id;
+    Experiences.getExperiencesByGuestId(guest_id)
+        .then(experiences => {
+            res.status(200).json(experiences)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+})
+
 router.get('/ge/:username', validateGuestUsername, (req, res) => {
     const username = req.params.username;
-    GE.getExperiencesByGuest(username)
+    Experiences.getExperiencesByGuest(username)
         .then(experiences => {
             res.status(200).json(experiences)
         })
