@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GE = require('./guestExperiencesHelpers');
-const {validateGuestId, validateGuestExperience, validateGuestExperienceForDelete} = require('../middleware')
+const { validateGuestExperience, validateGuestExperienceForDelete} = require('../middleware')
 
 router.get('/', (req, res) => {
     GE.getGuestExperiences()
@@ -13,16 +13,6 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/:id', validateGuestId, (req, res) => {
-    const guest_id = req.params.id;
-    GE.getExperiencesByGuestId(guest_id)
-        .then(experiences => {
-            res.status(200).json(experiences)
-        })
-        .catch(err => {
-            res.status(500).json({ error: err })
-        })
-})
 
 router.post('/guestexperiences', validateGuestExperience, (req, res) => {
     const guest_experience = req.body;
