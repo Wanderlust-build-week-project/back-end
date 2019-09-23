@@ -10,6 +10,8 @@ const LocationsRoute = require("./locations/locationsRouter");
 const TypesRoute = require("./types/typesRouter");
 const AuthRoute = require("./auth/authRouter");
 const ExperiencesRoute = require("./experiences/experiencesRouter");
+const ExperienceTypes = require("./experienceTypes/experienceTypesRouter");
+const GuestExperiences = require("./guestExperiences/guestExperiencesRouter");
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
@@ -19,5 +21,7 @@ server.use("/organizers", authenticate, OrganizerRoute);
 server.use("/locations", authenticate, LocationsRoute);
 server.use("/types", authenticate, TypesRoute);
 server.use("/auth", AuthRoute);
-server.use("/experiences", authenticate, ExperiencesRoute);
+server.use("/exp", authenticate, ExperiencesRoute);
+server.use("/exptypes", authenticate, ExperienceTypes);
+server.use("/guestexp", authenticate, GuestExperiences)
 module.exports = server;
