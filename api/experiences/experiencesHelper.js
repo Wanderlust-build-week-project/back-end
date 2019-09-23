@@ -75,7 +75,7 @@ function getExperiencesByOrganizerId(organizer_id) {
 
 
 function getExperiencesByLocationId(location_id) {
-    return db('experiences').join('locations as l', 'experiences.location_id', 'l.id').select('l.id as location_id','l.location', 'e.*').where({location_id}).then(experiences => {
+    return db('experiences as e').join('locations as l', 'e.location_id', 'l.id').select('l.location', 'e.*').where({location_id}).then(experiences => {
         return experiences.map(experience => {
             if(experience.completed === 1) {
                 experience.completed = true
