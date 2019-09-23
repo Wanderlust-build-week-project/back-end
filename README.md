@@ -2,6 +2,10 @@
 
 This repository serves as the backend for Lambda School's Wanderlust Build Week group of September 2019.
 
+## Documentation
+
+For a full description of endpoints with examples, please see [Postman Documentation](https://documenter.getpostman.com/view/8893649/SVmySJBg?version=latest).
+
 ## Dependencies
 
 - knex
