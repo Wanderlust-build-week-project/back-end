@@ -12,7 +12,6 @@ const {
     validateTypeName, 
     validateNewExperience,
     validateGuestId,
-    validateGuestUsername
     
 } = require('../middleware');
 
