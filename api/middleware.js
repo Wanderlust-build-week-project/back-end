@@ -3,7 +3,8 @@ const Guests = require("./guests/guestsHelper");
 const Experiences = require("./experiences/experiencesHelper");
 const Locations = require("./locations/locationsHelper");
 const Types = require("./types/typesHelper");
-
+const GuestExperiences = require('./guestExperiences/guestExperiencesHelpers');
+const ExperienceTypes = require('./experienceTypes/experienceTypesHelpers')
 module.exports = {
   validateGuestId,
   validateGuestUsername,
@@ -207,7 +208,7 @@ function validateGuestExperience(req, res, next) {
 function validateGuestExperienceForDelete(req, res, next) {
   const guest_id = req.params.guest_id;
   const experience_id = req.params.experience_id;
-  Experiences.getGuestExperienceByIds(guest_id, experience_id)
+  GuestExperiences.getGuestExperienceByIds(guest_id, experience_id)
   .then(guestExperience => {
     if(guestExperience) {
       next()

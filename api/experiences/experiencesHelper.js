@@ -9,18 +9,12 @@ module.exports = {
     getExperiencesByGuest,
     getExperiencesByGuestId,
     getExperiencesByType,
-    addExperienceType,
-    getExperienceTypes,
     getExperiencesByLocation,
     getExperiencesByTypeId,
     getExperiencesByOrganizerId,
     updateExperience,
     deleteExperience,
-    addGuestExperience,
-    getGuestExperiences,
-    updateGuestExperience,
-    deleteGuestExperience,
-    getGuestExperienceByIds
+    
 }
 
 function getExperiences() {
@@ -150,73 +144,6 @@ function deleteExperience(id) {
     return db('experiences').where({id}).del().then(result => result)
 }
 
-function addExperienceType(experienceType){
-    return db('experience_types').insert(experienceType).then(result => result)
-}
-
-function getExperienceTypes() {
-    return db('experience_types').then(et => et)
-}
-
-function addGuestExperience(guestExperience) {
-    return db('guest_experiences').insert(guestExperience).then(result => {
-        return db('guest_experiences as ge').join('guests as g', 'ge.guest_id', 'g.id').join('experiences as e', 'ge.experience_id', 'e.id').select('g.username', 'ge.*','ge.completed as guest_completed', 'e.*')
-        .where({guest_id: guestExperience.guest_id, experience_id: guestExperience.experience_id}).first().then(experience => {
-            if(experience.completed === 1) {
-                experience.completed = true;
-            } else {
-                experience.completed = false;
-            }
-
-            if(experience.guest_completed === 1) {
-                experience.guest_completed = true;
-            } else {
-                experience.guest_completed = false;
-            }
-
-            if(experience.favorited === 1) {
-                experience.favorited = true;
-            } else {
-                experience.favortied = false;
-            }
-
-            return experience;
-        })
-    })
-}
-function updateGuestExperience(guest_id, experience_id, updated_experience){
-    return db('guest_experiences').update(updated_experience).where({guest_id: guest_id, experience_id: experience_id}).then(result => {
-        return db('guest_experiences as ge').join('guests as g', 'ge.guest_id', 'g.id').join('experiences as e', 'ge.experience_id', 'e.id').select('g.username', 'ge.*','ge.completed as guest_completed', 'e.*')
-        .where({guest_id: guest_id, experience_id: experience_id}).first().then(experience => {
-            if(experience.completed === 1) {
-                experience.completed = true;
-            } else {
-                experience.completed = false;
-            }
-
-            if(experience.guest_completed === 1) {
-                experience.guest_completed = true;
-            } else {
-                experience.guest_completed = false;
-            }
-
-            if(experience.favorited === 1) {
-                experience.favorited = true;
-            } else {
-                experience.favortied = false;
-            }
-
-            return experience;
-        })
-    })
-}
-function getGuestExperiences() {
-    return db('guest_experiences').then(guest_experiences => guest_experiences);
-}
-
-function getGuestExperienceByIds(guest_id, experience_id) {
-    return db('guest_experiences').where({guest_id: guest_id, experience_id: experience_id}).first().then(result => result)
-}
 
 function getExperiencesByGuestId(guest_id) {
     return db('guest_experiences as ge').join('experiences as e', 'ge.experience_id', 'e.id').join('guests as g', 'g.id', 'ge.guest_id').select('g.username', 'e.*').where({guest_id}).then(experiences => {
@@ -258,6 +185,3 @@ function getExperiencesByGuest(username) {
     })
 }
 
-function deleteGuestExperience(guest_id, experience_id) {
-    return db('guest_experiences').del().where({guest_id: guest_id, experience_id: experience_id}).then(result => result)
-}
