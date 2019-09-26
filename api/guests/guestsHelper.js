@@ -10,7 +10,7 @@ module.exports = {
 };
 
 function getGuests() {
-  return db("guests").select('id', 'username', 'name');
+  return db("guests").select("id", "username", "name");
 }
 
 function getGuestById(id) {
@@ -20,7 +20,7 @@ function getGuestById(id) {
 }
 
 async function addGuest(guest) {
-  const [id] = await db("guests").insert(guest);
+  const [id] = await db("guests").insert(guest, "id");
   return getGuestById(id);
 }
 
