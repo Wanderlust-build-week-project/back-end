@@ -26,7 +26,7 @@ function getLocationByName(location) {
 }
 
 async function addLocation(location) {
-  const [id] = await db("locations").insert(location);
+  const [id] = await db("locations").insert(location, "id");
   return getLocationById(id);
 }
 

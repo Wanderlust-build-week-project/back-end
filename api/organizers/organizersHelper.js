@@ -10,20 +10,22 @@ module.exports = {
 };
 
 function getOrganizers() {
-  return db("organizers").select('name', 'username', 'id').then(organizers => organizers);
+  return db("organizers")
+    .select("name", "username", "id")
+    .then(organizers => organizers);
 }
 
 function getOrganizerById(id) {
   return db("organizers")
     .where({ id })
-    .select('name','username','id')
+    .select("name", "username", "id")
     .first()
     .then(organizer => organizer);
 }
 
 function addOrganizer(organizer) {
   return db("organizers")
-    .insert(organizer)
+    .insert(organizer, "id")
     .then(result => {
       return getOrganizerByUsername(organizer.username).then(
         organizer => organizer
@@ -34,7 +36,7 @@ function addOrganizer(organizer) {
 function getOrganizerByUsername(username) {
   return db("organizers")
     .where({ username })
-    .select('username','name','id')
+    .select("username", "name", "id")
     .first()
     .then(organizer => organizer);
 }
